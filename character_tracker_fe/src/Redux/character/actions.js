@@ -35,15 +35,49 @@ export const getCharacterThunk = () => {
   }
 }
 
-export const postCharacterThunk = () => {
+export const postCharacterThunk = character => {
   return dispatch => {
     axios
-      .post(`${process.env.REACT_APP_API_SERVER}/api/character/create`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      .post(
+        `${process.env.REACT_APP_API_SERVER}/api/character/create`,
+        { character },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      )
       .then(response => {
         console.log('Post Character Thunk:', response)
         dispatch(postCharacter(response.data))
       })
+  }
+}
+
+export const ADD_DESCRIPTION = 'ADD_DESCRIPTION'
+export const ADD_STATS = 'ADD_STATS'
+export const ADD_SKILLS = 'ADD_SKILLS'
+export const ADD_EQUIPMENT = 'ADD_EQUIPMENT'
+
+export function addDescription (description) {
+  return {
+    type: ADD_DESCRIPTION,
+    payload: description
+  }
+}
+export function addStats (stats) {
+  return {
+    type: ADD_STATS,
+    payload: stats
+  }
+}
+export function addSkills (skills) {
+  return {
+    type: ADD_SKILLS,
+    payload: skills
+  }
+}
+export function addEqupiment (equipment) {
+  return {
+    type: ADD_EQUIPMENT,
+    payload: equipment
   }
 }

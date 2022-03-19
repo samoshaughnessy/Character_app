@@ -20,16 +20,17 @@ class CharacterRouter {
 
   router () {
     let router = this.express.Router()
-    router.post('create', this.authClass.authenticate(), this.post.bind(this))
+    router.post('/create', this.authClass.authenticate(), this.post.bind(this))
     router.get('/all', this.authClass.authenticate(), this.get.bind(this))
 
     return router
   }
 
   async post (req, res) {
+    console.log(req.body)
     console.log(req.user[0])
     return this.characterService
-      .createCharacter(req.user[0].id, req.body.details)
+      .createCharacter(req.user[0].id, req.body.character)
       .then(character => {
         res.send(character)
       })

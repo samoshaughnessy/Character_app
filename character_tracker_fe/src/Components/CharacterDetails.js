@@ -1,5 +1,8 @@
 import { Modal, InputGroup, FormControl, Button } from 'react-bootstrap'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+
+import { addDescription } from '../Redux/character/actions'
 
 function CharacterDetails (props) {
   const [characterDetails, setCharacterDetails] = useState({
@@ -8,6 +11,8 @@ function CharacterDetails (props) {
     backgroundEffect: '',
     image: ''
   })
+
+  const dispatch = useDispatch()
 
   return (
     <Modal show={props.show} onHide={props.onHide}>
@@ -28,7 +33,7 @@ function CharacterDetails (props) {
             }
           />
         </InputGroup>
-        <InputGroup>
+        <InputGroup className='mb-3'>
           <InputGroup.Text>Character Background</InputGroup.Text>
           <FormControl
             as='textarea'
@@ -43,7 +48,7 @@ function CharacterDetails (props) {
             }
           />
         </InputGroup>
-        <InputGroup>
+        <InputGroup className='mb-3'>
           <InputGroup.Text>Character Background Effect</InputGroup.Text>
           <FormControl
             as='textarea'
@@ -81,6 +86,7 @@ function CharacterDetails (props) {
         <Button
           variant='secondary'
           onClick={() => {
+            dispatch(addDescription(characterDetails))
             props.onHide()
             props.next()
           }}

@@ -12,27 +12,106 @@ class CharacterService {
   }
 
   async createCharacter (userID, characterDetails) {
+    console.log(characterDetails)
+    console.log(characterDetails.description.name)
+    console.log(userID)
     const character = {
-      name: characterDetails.name,
-      background: characterDetails.background,
-      background_effects: characterDetails.background_effects,
-      strength: characterDetails.strength,
-      dexterity: characterDetails.dexterity,
-      intelligence: characterDetails.intelligence,
-      concentration: characterDetails.concentration,
-      charisma: characterDetails.charisma,
-      hp: characterDetails.hp,
-      stamina: characterDetails.stamina,
-      gold: characterDetails.gold,
-      silver: characterDetails.silver,
+      name: characterDetails.description[0].name,
+      background: characterDetails.description[0].background,
+      background_effects: characterDetails.description[0].backgroundEffect,
+      strength: characterDetails.stats[0].strength,
+      dexterity: characterDetails.stats[0].dexterity,
+      intelligence: characterDetails.stats[0].intelligence,
+      concentration: characterDetails.stats[0].concentration,
+      charisma: characterDetails.stats[0].charisma,
+      hp: characterDetails.stats[0].hp,
+      stamina: characterDetails.stats[0].stamina,
+      gold: 0,
+      silver: 0,
       user_id: userID,
-      image: characterDetails.image
+      image: characterDetails.description[0].image
     }
 
     const characterID = await this.knex
       .insert(character)
       .into('character')
       .returning('id')
+
+    // insert into weapons
+
+    // insert into skills
+
+    let swords_skills = {
+      skills_id: 1,
+      character_id: characterID,
+      skill_level: characterDetails.skills[0].swordPlay
+    }
+
+    let bow_skills = {
+      skills_id: 2,
+      character_id: characterID,
+      skill_level: characterDetails.skills[0].bowUse
+    }
+    let crossbow_skills = {
+      skills_id: 3,
+      character_id: characterID,
+      skill_level: characterDetails.skills[0].crossbowProficency
+    }
+    let spear_skills = {
+      skills_id: 4,
+      character_id: characterID,
+      skill_level: characterDetails.skills[0].spearPlay
+    }
+    let axe_skills = {
+      skills_id: 5,
+      character_id: characterID,
+      skill_level: characterDetails.skills[0].axePlay
+    }
+    let sheild_skills = {
+      skills_id: 6,
+      character_id: characterID,
+      skill_level: characterDetails.skills[0].sheildPlay
+    }
+    let persuade_skills = {
+      skills_id: 7,
+      character_id: characterID,
+      skill_level: characterDetails.skills[0].persuade
+    }
+    let intimidate_skills = {
+      skills_id: 8,
+      character_id: characterID,
+      skill_level: characterDetails.skills[0].intimidate
+    }
+    let awareness_skills = {
+      skills_id: 9,
+      character_id: characterID,
+      skill_level: characterDetails.skills[0].awareness
+    }
+    let search_skills = {
+      skills_id: 10,
+      character_id: characterID,
+      skill_level: characterDetails.skills[0].search
+    }
+    let healing_skills = {
+      skills_id: 11,
+      character_id: characterID,
+      skill_level: characterDetails.skills[0].healing
+    }
+    let craft_skills = {
+      skills_id: 12,
+      character_id: characterID,
+      skill_level: characterDetails.skills[0].craft
+    }
+    let tactics_skills = {
+      skills_id: 13,
+      character_id: characterID,
+      skill_level: characterDetails.skills[0].tactics
+    }
+    let hunt_skills = {
+      skills_id: 14,
+      character_id: characterID,
+      skill_level: characterDetails.skills[0].hunt
+    }
 
     return characterID
   }

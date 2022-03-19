@@ -7,14 +7,17 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getCharacterThunk } from '../Redux/character/actions'
-import { getArmouryThunk } from '../Redux/armoury/actions'
+import {
+  getCharacterThunk,
+  postCharacterThunk
+} from '../Redux/character/actions'
 import CharacterDetails from './CharacterDetails'
 import CharacterStats from './CharacterStats'
 import CharacterSkills from './CharacterSkills'
 import CharacterEquipment from './CharacterEquipment'
+import { getArmouryThunk } from '../Redux/armoury/actions'
 
-import { Modal, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 
 export default function CharacterList () {
   const [showCharacterDetails, setShowCharacterDetails] = useState(false)
@@ -40,10 +43,22 @@ export default function CharacterList () {
 
   const dispatch = useDispatch()
 
+  const stats = useSelector(state => state.characterStore.characterStats)
+  const skills = useSelector(state => state.characterStore.characterSkills)
+  const weapons = useSelector(state => state.characterStore.characterWeapons)
+  const description = useSelector(
+    state => state.characterStore.characterDescription
+  )
+  function createCharacter () {
+    const character = { stats, skills, weapons, description }
+
+    dispatch(postCharacterThunk(character))
+  }
+
   useEffect(() => {
     dispatch(getCharacterThunk())
     dispatch(getArmouryThunk())
-  }, [dispatch])
+  }, [dispatch, weapons])
 
   return (
     <div>
@@ -82,7 +97,10 @@ export default function CharacterList () {
             <CharacterEquipment
               show={showCharacterEquipment}
               onHide={stopShowEquipment}
-              next={() => setShowCharacterSkills(!showCharacterStats)}
+              next={() => {
+                stopShowEquipment()
+                createCharacter()
+              }}
             />
           </>
         )}
