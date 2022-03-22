@@ -7,7 +7,7 @@
 }
 
 .margin {
-  margin: 10px
+  margin: 10px !important
 }
 
 .flexCentered {
@@ -31,4 +31,6 @@
   width: 14rem;
 }
 
-
+.unclickable {
+  pointer-events: none;
+}

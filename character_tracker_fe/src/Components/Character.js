@@ -6,7 +6,7 @@
 
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import {
   getCharacterThunk,
   postCharacterThunk
@@ -16,14 +16,36 @@ import CharacterStats from './CharacterStats'
 import CharacterSkills from './CharacterSkills'
 import CharacterEquipment from './CharacterEquipment'
 import { getArmouryThunk } from '../Redux/armoury/actions'
+import CharacterCard from './CharacterCard'
 
 import { Button } from 'react-bootstrap'
+
+// Make a modal character screen to display the character info of the character selected
+// in thie modal be able to update everything
 
 export default function CharacterList () {
   const [showCharacterDetails, setShowCharacterDetails] = useState(false)
   const [showCharacterStats, setShowCharacterStats] = useState(false)
   const [showCharacterSkills, setShowCharacterSkills] = useState(false)
   const [showCharacterEquipment, setShowCharacterEquipment] = useState(false)
+  const [sendChar, setSendChar] = useState(false)
+  const stats = useSelector(state => state.characterStore.characterStats)
+  const skills = useSelector(state => state.characterStore.characterSkills)
+  const weapons = useSelector(state => state.characterStore.characterWeapons)
+  const description = useSelector(
+    state => state.characterStore.characterDescription
+  )
+  function createCharacter () {
+    console.log(stats, skills, weapons, description)
+    const character = { stats, skills, weapons, description }
+    console.log('ending')
+    dispatch(postCharacterThunk(character))
+  }
+
+  function select (e, itemInfo, type) {
+    console.log(e.target)
+    console.log(itemInfo)
+  }
 
   const showDetails = () => setShowCharacterDetails(true)
   const stopShowDetails = () => setShowCharacterDetails(false)
@@ -35,44 +57,72 @@ export default function CharacterList () {
   const stopShowSkills = () => setShowCharacterSkills(false)
 
   const showEquipment = () => setShowCharacterEquipment(true)
-  const stopShowEquipment = () => setShowCharacterEquipment(false)
+  const stopShowEquipment = () => {
+    setShowCharacterEquipment(false)
+  }
 
   const charactersFromRedux = useSelector(
     state => state.characterStore.characters
   )
 
   const dispatch = useDispatch()
-
-  const stats = useSelector(state => state.characterStore.characterStats)
-  const skills = useSelector(state => state.characterStore.characterSkills)
-  const weapons = useSelector(state => state.characterStore.characterWeapons)
-  const description = useSelector(
-    state => state.characterStore.characterDescription
-  )
-  function createCharacter () {
-    const character = { stats, skills, weapons, description }
-
-    dispatch(postCharacterThunk(character))
-  }
-
+  // this component doesnt get the newest version of the redux store before sending
   useEffect(() => {
     dispatch(getCharacterThunk())
     dispatch(getArmouryThunk())
-  }, [dispatch, weapons])
+
+    if (sendChar) {
+      console.log('Redux', weapons, stats, description, skills)
+      console.log('starting')
+      createCharacter()
+      setSendChar(false)
+    }
+
+    console.log('useeffect', weapons, stats, description, skills)
+  }, [dispatch, showCharacterEquipment])
 
   return (
     <div>
+      <CharacterDetails
+        show={showCharacterDetails}
+        onHide={stopShowDetails}
+        next={showStats}
+      />
+      <CharacterStats
+        show={showCharacterStats}
+        onHide={stopShowStats}
+        next={showSkills}
+      />
+      <CharacterSkills
+        show={showCharacterSkills}
+        onHide={stopShowSkills}
+        next={showEquipment}
+      />
+      <CharacterEquipment
+        show={showCharacterEquipment}
+        onHide={stopShowEquipment}
+        next={() => {
+          stopShowEquipment()
+          setSendChar(true)
+        }}
+      />
       <h1>
         This is where we will render out the characters people have, a card with
         the character image
       </h1>
 
-      <div>
+      <Button variant='secondary' onClick={showDetails}>
+        Make a Character
+      </Button>
+      <br />
+      <div className='flexCentered'>
         {charactersFromRedux && charactersFromRedux.length > 0 ? (
           charactersFromRedux.map(character => (
-            <div key={character.id}>
-              <p>{character.name}</p>
-            </div>
+            <CharacterCard
+              key={character.id}
+              character={character}
+              select={select}
+            />
           ))
         ) : (
           <>
@@ -99,7 +149,7 @@ export default function CharacterList () {
               onHide={stopShowEquipment}
               next={() => {
                 stopShowEquipment()
-                createCharacter()
+                setSendChar(true)
               }}
             />
           </>
@@ -108,3 +158,11 @@ export default function CharacterList () {
     </div>
   )
 }
+
+/**
+ *
+ *
+ *
+ * Bugg
+ * The application crashes when we cannot send full list
+ */

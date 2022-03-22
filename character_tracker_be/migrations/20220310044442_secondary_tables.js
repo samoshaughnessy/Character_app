@@ -15,7 +15,7 @@ exports.up = function (knex) {
     table.integer('intelligence').notNullable()
     table.integer('concentration').notNullable()
     table.integer('charisma').notNullable()
-    table.integer('hp').unique()
+    table.integer('hp')
     table.integer('stamina')
     table.integer('gold')
     table.integer('silver')

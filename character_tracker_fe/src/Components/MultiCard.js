@@ -7,7 +7,9 @@ function MultiCard (props) {
         {props.weapon && props.weapons.length > 0
           ? props.weapons.map(weapon => (
               <Card
-                onClick={e => props.select(e, weapon, 'weapon')}
+                onClick={e => {
+                  props.select(e, weapon, 'weapon')
+                }}
                 key={weapon.id}
                 className='customCard m-2'
               >
@@ -33,7 +35,9 @@ function MultiCard (props) {
         {props.armour && props.armourList.length > 0
           ? props.armourList.map(armour => (
               <Card
-                onClick={e => props.select(e, armour, 'armour')}
+                onClick={e => {
+                  props.select(e, armour, 'armour')
+                }}
                 key={armour.id}
                 className='customCard m-2'
               >

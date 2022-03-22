@@ -36,6 +36,7 @@ export const getCharacterThunk = () => {
 }
 
 export const postCharacterThunk = character => {
+  console.log('Character', character)
   return dispatch => {
     axios
       .post(
@@ -75,7 +76,8 @@ export function addSkills (skills) {
     payload: skills
   }
 }
-export function addEqupiment (equipment) {
+export function addEquipment (equipment) {
+  console.log('EQUIPEMENT', equipment)
   return {
     type: ADD_EQUIPMENT,
     payload: equipment

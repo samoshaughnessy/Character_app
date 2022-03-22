@@ -1,9 +1,9 @@
-import { Modal, Button } from 'react-bootstrap'
+import { Modal, Button, Container, Row, Col } from 'react-bootstrap'
 import MultiCard from './MultiCard'
 import { useSelector } from 'react-redux'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { addEqupiment } from '../Redux/character/actions'
+import { addEquipment } from '../Redux/character/actions'
 
 function CharacterEquipment (props) {
   const dispatch = useDispatch()
@@ -30,14 +30,26 @@ function CharacterEquipment (props) {
   }
 
   return (
-    <Modal size='xl' show={props.show} onHide={props.onHide}>
+    <Modal fullscreen={true} show={props.show} onHide={props.onHide}>
       <Modal.Header closeButton>Character Equipment</Modal.Header>
       <Modal.Body>
-        <h2>Armour</h2>
-        <MultiCard armour armourList={armour} select={select} />
-
-        <h2>Weapons</h2>
-        <MultiCard weapon weapons={weapons} select={select} />
+        <Container>
+          <Row>
+            <Col className='bg-warning'>
+              <h2>Armour</h2>
+              <MultiCard armour armourList={armour} select={select} />
+              <h2>Weapons</h2>
+              <MultiCard weapon weapons={weapons} select={select} />
+            </Col>
+            <Col className='bg-secondary'>
+              <h3>Chosen armourments</h3>
+              <h4>Armour</h4>
+              <MultiCard armour armourList={selectedArmour} />
+              <h4>Weapons</h4>
+              <MultiCard weapon weapons={selectedWeapons} />
+            </Col>
+          </Row>
+        </Container>
       </Modal.Body>
       <Modal.Footer>
         <Button variant='danger' onClick={() => props.onHide()}>
@@ -46,8 +58,8 @@ function CharacterEquipment (props) {
         <Button
           variant='secondary'
           onClick={() => {
+            dispatch(addEquipment({ selectedArmour, selectedWeapons }))
             props.next()
-            dispatch(addEqupiment({ selectedArmour, selectedWeapons }))
             props.onHide()
           }}
         >
