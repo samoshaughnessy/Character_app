@@ -29,14 +29,14 @@ export const getCharacterThunk = () => {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(response => {
-        console.log('Get Character Thunk:', response)
+        // console.log('Get Character Thunk:', response)
         dispatch(getCharacters(response.data))
       })
   }
 }
 
 export const postCharacterThunk = character => {
-  console.log('Character', character)
+  // console.log('Character', character)
   return dispatch => {
     axios
       .post(
@@ -77,9 +77,60 @@ export function addSkills (skills) {
   }
 }
 export function addEquipment (equipment) {
-  console.log('EQUIPEMENT', equipment)
   return {
     type: ADD_EQUIPMENT,
     payload: equipment
+  }
+}
+
+export const SET_CURRENT_CHARACTER = 'SET_CURRENT_CHARACTER'
+export function setCurrentCharacter (character) {
+  return {
+    type: SET_CURRENT_CHARACTER,
+    payload: character
+  }
+}
+
+export const GET_CURRENT_SKILLS = 'GET_CURRENT_SKILLS'
+export function getCurrentSkills (skills) {
+  return {
+    type: GET_CURRENT_SKILLS,
+    payload: skills
+  }
+}
+
+export const getCurrentSkillsThunk = characterId => {
+  return dispatch => {
+    axios
+      .get(
+        `${process.env.REACT_APP_API_SERVER}/api/character/skills/${characterId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      )
+      .then(response => {
+        console.log(('Get Skills Thunk:', response))
+        dispatch(getCurrentSkills(response.data))
+      })
+  }
+}
+
+export const GET_SKILLS = 'GET_SKILLS'
+
+export function getSkills (skills) {
+  return {
+    type: GET_SKILLS,
+    payload: skills
+  }
+}
+
+export const getSkillsThunk = () => {
+  return dispatch => {
+    axios
+      .get(`${process.env.REACT_APP_API_SERVER}/api/character/skills`)
+      .then(response => {
+        console.log(('Get Skills Thunk:', response))
+        dispatch(getSkills(response.data))
+      })
   }
 }

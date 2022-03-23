@@ -22,6 +22,12 @@ class CharacterRouter {
     let router = this.express.Router()
     router.post('/create', this.authClass.authenticate(), this.post.bind(this))
     router.get('/all', this.authClass.authenticate(), this.get.bind(this))
+    router.get('/skills', this.getSkills.bind(this))
+    router.get(
+      '/skills/:characterId',
+      this.authClass.authenticate(),
+      this.getCurrentSkills.bind(this)
+    )
 
     return router
   }
@@ -43,6 +49,16 @@ class CharacterRouter {
     return this.characterService
       .getCharacters(req.user[0].id)
       .then(characterData => res.send(characterData))
+  }
+
+  async getSkills (req, res) {
+    return this.characterService.getSkills().then(skills => res.send(skills))
+  }
+
+  async getCurrentSkills (req, res) {
+    return this.characterService
+      .getCurrentSkills(req.params.characterId, req.user[0].id)
+      .then(currentSkills => res.send(currentSkills))
   }
 }
 

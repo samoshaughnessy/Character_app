@@ -20,6 +20,11 @@ class WeaponArmourRouter {
   router () {
     let router = this.express.Router()
     router.get('/armoury', this.getAll.bind(this))
+    router.get(
+      '/armoury/:characterId',
+      this.authClass.authenticate(),
+      this.getCurrent.bind(this)
+    )
     return router
   }
 
@@ -28,6 +33,15 @@ class WeaponArmourRouter {
     return this.weaponArmourService
       .getArmoury()
       .then(armoury => res.send(armoury))
+  }
+
+  getCurrent (req, res) {
+    console.log('Getting current')
+    return this.weaponArmourService
+      .getCurrent(req.params.characterId, req.user[0].id)
+      .then(current => {
+        res.send(current)
+      })
   }
 }
 

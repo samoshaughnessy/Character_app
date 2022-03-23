@@ -17,7 +17,7 @@ function CharacterEquipment (props) {
     console.log('loading')
   }, [armour, weapons])
 
-  function select (e, itemInfo, type) {
+  function selectWeaponArmour (e, itemInfo, type) {
     console.log(e.target)
     console.log(itemInfo)
     if (type === 'weapon') {
@@ -37,9 +37,13 @@ function CharacterEquipment (props) {
           <Row>
             <Col className='bg-warning'>
               <h2>Armour</h2>
-              <MultiCard armour armourList={armour} select={select} />
+              <MultiCard
+                armour
+                armourList={armour}
+                select={selectWeaponArmour}
+              />
               <h2>Weapons</h2>
-              <MultiCard weapon weapons={weapons} select={select} />
+              <MultiCard weapon weapons={weapons} select={selectWeaponArmour} />
             </Col>
             <Col className='bg-secondary'>
               <h3>Chosen armourments</h3>
