@@ -134,3 +134,51 @@ export const getSkillsThunk = () => {
       })
   }
 }
+
+export const updateSkillsThunk = (characterId, skills) => {
+  console.log(skills, characterId)
+  return dispatch => {
+    axios
+      .put(
+        `${process.env.REACT_APP_API_SERVER}/api/character/skills/${characterId}`,
+        { skills },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then(response => {
+        console.log(('Get Skills Thunk:', response))
+        // dispatch(getCurrentSkills(response.data))
+      })
+  }
+}
+
+export const updateCurrentStatsThunk = (characterId, stats, character) => {
+  return dispatch => {
+    console.log(character, 'character')
+    axios
+      .put(
+        `${process.env.REACT_APP_API_SERVER}/api/character/stats/${characterId}`,
+        { stats },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then(response => {
+        console.log(('update State', response))
+        // dispatch(getCurrentSkills(response.data))
+      })
+  }
+}
+
+export const updateCharacterStatsThunk = (characterId, stats, character) => {
+  return dispatch => {
+    console.log(character, 'character')
+    axios
+      .put(
+        `${process.env.REACT_APP_API_SERVER}/api/character/statistics/${characterId}`,
+        { stats },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then(response => {
+        console.log(('update State', response))
+        // dispatch(getCurrentSkills(response.data))
+      })
+  }
+}

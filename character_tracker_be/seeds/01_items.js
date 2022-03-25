@@ -13,8 +13,7 @@ exports.seed = async function (knex) {
       description: 'Heals some health',
       target_stat: 'HP',
       amount: 7,
-      image:
-        'https://cdn-icons.flaticon.com/png/512/4417/premium/4417793.png?token=exp=1646893717~hmac=868c1bb22ce96cd41c140ee43ed33780',
+      image: 'https://cdn-icons-png.flaticon.com/512/7104/7104133.png',
       price: '5 silver'
     },
     {
@@ -24,8 +23,7 @@ exports.seed = async function (knex) {
       description: 'Heals Health',
       target_stat: 'HP',
       amount: 20,
-      image:
-        'https://cdn-icons.flaticon.com/png/512/4417/premium/4417881.png?token=exp=1646893736~hmac=e86581f5c8a292efb2429eff3298df92',
+      image: 'https://cdn-icons-png.flaticon.com/512/7154/7154865.png',
       price: '2 gold'
     },
     {
@@ -35,8 +33,7 @@ exports.seed = async function (knex) {
       description: 'Grants you strength',
       target_stat: 'Strength',
       amount: 5,
-      image:
-        'https://cdn-icons.flaticon.com/png/512/2790/premium/2790362.png?token=exp=1646894029~hmac=83384b91ade9f7f1c1eac87dd4d16f34',
+      image: 'https://cdn-icons-png.flaticon.com/512/2736/2736454.png',
       price: '1 gold'
     },
     {
@@ -56,8 +53,7 @@ exports.seed = async function (knex) {
       description: 'A light in the dark',
       target_stat: 'NA',
       amount: 0,
-      image:
-        'https://cdn-icons.flaticon.com/png/512/2919/premium/2919268.png?token=exp=1646894435~hmac=372fd01b3c2405c2484f7734ac281a2d',
+      image: 'https://cdn-icons-png.flaticon.com/512/1021/1021216.png',
       price: '10 silver'
     },
     {
@@ -67,8 +63,7 @@ exports.seed = async function (knex) {
       description: 'One spark if used wisely will set something alight',
       target_stat: 'N/A',
       amount: 0,
-      image:
-        'https://cdn-icons.flaticon.com/png/512/3574/premium/3574873.png?token=exp=1646894515~hmac=e293b051f4d161c202511b84767ccd46',
+      image: 'https://cdn-icons-png.flaticon.com/512/7114/7114469.png',
       price: '1 silver'
     },
     {
@@ -78,8 +73,7 @@ exports.seed = async function (knex) {
       description: 'If you want to sleep in style',
       target_stat: 'N/A',
       amount: 0,
-      image:
-        'https://cdn-icons.flaticon.com/png/512/804/premium/804945.png?token=exp=1646894544~hmac=57894164de038089269feff99585b17d',
+      image: 'https://cdn-icons-png.flaticon.com/512/2826/2826933.png',
       price: '1 gold'
     },
     {

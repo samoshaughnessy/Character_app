@@ -25,6 +25,21 @@ class WeaponArmourRouter {
       this.authClass.authenticate(),
       this.getCurrent.bind(this)
     )
+    router.post(
+      '/armoury/items/:characterId',
+      this.authClass.authenticate(),
+      this.postItems.bind(this)
+    )
+    router.put(
+      '/armoury/items/:characterId',
+      this.authClass.authenticate(),
+      this.putItems.bind(this)
+    )
+    router.put(
+      '/armoury/new/:characterId',
+      this.authClass.authenticate(),
+      this.putWeapons.bind(this)
+    )
     return router
   }
 
@@ -42,6 +57,27 @@ class WeaponArmourRouter {
       .then(current => {
         res.send(current)
       })
+  }
+
+  postItems (req, res) {
+    console.log('posting')
+    return this.weaponArmourService
+      .setItems(req.params.characterId, req.user[0].id, req.body.items)
+      .then(items => res.send(items))
+  }
+
+  putItems (req, res) {
+    console.log('Putting')
+    return this.weaponArmourService
+      .deleteItems(req.params.characterId, req.user[0].id, req.body.items)
+      .then(response => res.send(response))
+  }
+
+  putWeapons (req, res) {
+    console.log('Putting')
+    return this.weaponArmourService
+      .newWeapons(req.params.characterId, req.user[0].id, req.body.weapons)
+      .then(response => res.send(response))
   }
 }
 

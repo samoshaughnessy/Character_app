@@ -28,13 +28,26 @@ class CharacterRouter {
       this.authClass.authenticate(),
       this.getCurrentSkills.bind(this)
     )
+    router.put(
+      '/stats/:characterId',
+      this.authClass.authenticate(),
+      this.putUpdateStats.bind(this)
+    )
+    router.put(
+      '/statistics/:characterId',
+      this.authClass.authenticate(),
+      this.putUpdateStatistics.bind(this)
+    )
+    router.put(
+      '/skills/:characterId',
+      this.authClass.authenticate(),
+      this.putUpdateSkills.bind(this)
+    )
 
     return router
   }
 
   async post (req, res) {
-    console.log(req.body)
-    console.log(req.user[0])
     return this.characterService
       .createCharacter(req.user[0].id, req.body.character)
       .then(character => {
@@ -43,9 +56,6 @@ class CharacterRouter {
   }
 
   async get (req, res) {
-    console.log('checking get?')
-
-    console.log(req.user[0])
     return this.characterService
       .getCharacters(req.user[0].id)
       .then(characterData => res.send(characterData))
@@ -59,6 +69,30 @@ class CharacterRouter {
     return this.characterService
       .getCurrentSkills(req.params.characterId, req.user[0].id)
       .then(currentSkills => res.send(currentSkills))
+  }
+
+  async putUpdateStats (req, res) {
+    return this.characterService
+      .updateStats(req.params.characterId, req.body.stats)
+      .then(() => {
+        res.send('all done')
+      })
+  }
+
+  async putUpdateStatistics (req, res) {
+    console.log(req.body)
+    return this.characterService
+      .updateStatistics(req.params.characterId, req.body.stats)
+      .then(() => {
+        res.send('all done')
+      })
+  }
+
+  async putUpdateSkills (req, res) {
+    console.log(req.body)
+    return this.characterService
+      .updateSkills(req.params.characterId, req.body.skills)
+      .then(response => res.send('all done'))
   }
 }
 

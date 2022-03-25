@@ -14,8 +14,6 @@ exports.up = function (knex) {
       table.increments('id').primary()
       table.string('item').notNullable()
       table.integer('amount').notNullable()
-      table.string('description').notNullable()
-      table.integer('encumberance').notNullable()
       table.integer('character_id').unsigned()
       table.foreign('character_id').references('character.id')
       table.integer('item_id').unsigned()

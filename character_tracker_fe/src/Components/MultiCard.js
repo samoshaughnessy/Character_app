@@ -58,7 +58,13 @@ function MultiCard (props) {
       <div className='flexCentered'>
         {props.item && props.itemList.length > 0
           ? props.itemList.map(item => (
-              <Card key={item.id} className='customCard m-2'>
+              <Card
+                key={item.id}
+                className='customCard m-2'
+                onClick={e => {
+                  props.select(e, item, 'item')
+                }}
+              >
                 <Card.Img className='image' variant='top' src={item.image} />
                 <Card.Body>
                   <Card.Title>{item.description}</Card.Title>
@@ -73,7 +79,7 @@ function MultiCard (props) {
                 </Card.Body>
               </Card>
             ))
-          : 'No items'}
+          : null}
       </div>
     </>
   )

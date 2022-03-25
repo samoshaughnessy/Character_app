@@ -3,6 +3,8 @@
 // update armour
 // update ammunition
 
+const e = require('express')
+
 class WeaponArmourService {
   constructor (knex) {
     this.knex = knex
@@ -18,7 +20,6 @@ class WeaponArmourService {
 
   async getCurrent (characterId, userId) {
     function getData (current, i, knex, weapons) {
-      console.log(current)
       if (weapons == 'weapons') {
         return knex
           .select('*')
@@ -41,7 +42,6 @@ class WeaponArmourService {
       .where({ character_id: characterId })
     const newCurrentWeapons = Promise.all([
       ...currentWeapons.map((current, i) => {
-        console.log(current)
         return getData(current, i, this.knex, 'weapons')
       })
     ])
@@ -65,26 +65,124 @@ class WeaponArmourService {
     ])
 
     return newCurrentWeapons.then(weaponData => {
-      console.log('New Current Weapons', weaponData)
-
       return newCurrentArmour.then(armourData => {
-        console.log('New Current Armour', armourData)
-
         return newCurrentItems.then(itemData => {
-          console.log('New Current Items', itemData)
+          let characterItemdata = itemData.map(element => {
+            return element[0]
+          })
 
-          console.log({
-            weapons: weaponData,
-            armour: armourData,
-            items: itemData
+          let characterWeapondata = weaponData.map(element => {
+            return element[0]
+          })
+
+          let characterArmourdata = armourData.map(element => {
+            return element[0]
           })
           return {
-            weapons: weaponData,
-            armour: armourData,
-            items: itemData
+            weapons: characterWeapondata,
+            armour: characterArmourdata,
+            items: characterItemdata
           }
         })
       })
+    })
+  }
+
+  async newWeapons (characterId, userId, weapons) {
+    await this.knex('character_weapons')
+      .where({ character_id: characterId })
+      .del()
+    await this.knex('character_armour')
+      .where({ character_id: characterId })
+      .del()
+
+    console.log(weapons)
+
+    weapons.selectedArmour.forEach(async element => {
+      await this.knex('character_armour').insert({
+        armour_id: element.id,
+        character_id: characterId
+      })
+    })
+
+    weapons.selectedWeapons.forEach(async element => {
+      if (element.id == 6 || element.id == 7) {
+        await this.knex('character_weapons').insert({
+          weapon_id: element.id,
+          character_id: characterId,
+          ammunition: 10
+        })
+      } else {
+        await this.knex('character_weapons').insert({
+          weapon_id: element.id,
+          character_id: characterId
+        })
+      }
+    })
+  }
+
+  async deleteItems (characterId, userId, items) {
+    items.forEach(async element => {
+      await this.knex('character_inventory')
+        .where({ character_id: characterId })
+        .andWhere({ item_id: element.id })
+        .del()
+    })
+    return 'all done'
+  }
+
+  async setItems (characterId, userId, items) {
+    function getData (current, i, knex, weapons) {
+      if (weapons == 'weapons') {
+        return knex
+          .select('*')
+          .from('weapons')
+          .where({ id: current.weapon_id })
+      } else if (weapons == 'armour') {
+        return knex
+          .select('*')
+          .from('armour')
+          .where({ id: current.armour_id })
+      } else if (weapons == 'items') {
+        return knex
+          .select('*')
+          .from('items')
+          .where({ id: current.item_id })
+      }
+    }
+    console.log(items, 'items')
+
+    items.forEach(async element => {
+      await this.knex
+        .insert({
+          item: element.name,
+          amount: 1,
+          character_id: characterId,
+          item_id: element.id
+        })
+        .into('character_inventory')
+    })
+
+    const currentItems = await this.knex('character_inventory')
+      .select('*')
+      .where({ character_id: characterId })
+
+    const newCurrentItems = Promise.all([
+      ...currentItems.map((current, i) =>
+        getData(current, i, this.knex, 'items')
+      )
+    ])
+
+    return newCurrentItems.then(itemData => {
+      console.log(itemData, 'item data!')
+      let data = []
+      for (let i = 0; i < itemData.length; i++) {
+        data.push(itemData[i][0])
+      }
+      console.log(data)
+      return {
+        items: data
+      }
     })
   }
 }

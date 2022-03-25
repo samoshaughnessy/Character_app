@@ -1,9 +1,10 @@
 import { Modal, Button, Container, Row, Col } from 'react-bootstrap'
 import MultiCard from './MultiCard'
 import { useSelector } from 'react-redux'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addEquipment } from '../Redux/character/actions'
+import { updateWeaponsThunk } from '../Redux/armoury/actions'
 
 function CharacterEquipment (props) {
   const dispatch = useDispatch()
@@ -12,10 +13,6 @@ function CharacterEquipment (props) {
 
   const [selectedArmour, setSelectedArmour] = useState([])
   const [selectedWeapons, setSelectedWeapons] = useState([])
-
-  useEffect(() => {
-    console.log('loading')
-  }, [armour, weapons])
 
   function selectWeaponArmour (e, itemInfo, type) {
     console.log(e.target)
@@ -65,6 +62,14 @@ function CharacterEquipment (props) {
             dispatch(addEquipment({ selectedArmour, selectedWeapons }))
             props.next()
             props.onHide()
+            dispatch(
+              updateWeaponsThunk(props.currentCharacter.id, {
+                selectedArmour,
+                selectedWeapons
+              })
+            )
+            setSelectedArmour([])
+            setSelectedWeapons([])
           }}
         >
           Save Character

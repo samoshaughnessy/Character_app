@@ -23,8 +23,7 @@ exports.seed = async function (knex) {
       critial: '8 or above, on d10, strengh bonus x2',
       penetration: 4,
       encumberance: 6,
-      image:
-        'https://cdn-icons.flaticon.com/png/512/2929/premium/2929708.png?token=exp=1646903444~hmac=55144be0a02290b527e443fdc0388822',
+      image: 'https://cdn-icons-png.flaticon.com/512/7105/7105824.png',
       price: '3 gold'
     },
     {
@@ -34,8 +33,7 @@ exports.seed = async function (knex) {
       critial: '5 or above, on d6, strengh bonus x2',
       penetration: 4,
       encumberance: 5,
-      image:
-        'https://cdn-icons.flaticon.com/png/512/2272/premium/2272404.png?token=exp=1646903670~hmac=b36836b949eac36a5e210eba27bad00e',
+      image: 'https://cdn-icons-png.flaticon.com/512/1147/1147273.png',
       price: '2 gold'
     },
     {
@@ -45,8 +43,7 @@ exports.seed = async function (knex) {
       critial: '9 or above, on d12, strengh bonus x2',
       penetration: 6,
       encumberance: 7,
-      image:
-        'https://cdn-icons.flaticon.com/png/512/1912/premium/1912539.png?token=exp=1646903662~hmac=3b0285bae7d94b4b3b24cbc8cb92e845',
+      image: 'https://cdn-icons-png.flaticon.com/512/942/942613.png',
       price: '5 gold'
     },
     {
@@ -76,8 +73,7 @@ exports.seed = async function (knex) {
       critial: '6, on either d6, strengh full strength bonus applies',
       penetration: 2,
       encumberance: 3,
-      image:
-        'https://cdn-icons.flaticon.com/png/512/4439/premium/4439420.png?token=exp=1646904235~hmac=14747c357b6509f0831f5a6208799652',
+      image: 'https://cdn-icons-png.flaticon.com/512/7082/7082367.png',
       price: '4 gold'
     },
     {

@@ -67,7 +67,13 @@ function DisplayCard (props) {
       <div className='flexCentered'>
         {props.item && props.itemList.length > 0
           ? props.itemList.map(item => (
-              <Card key={item[0].id} className='customCard m-2'>
+              <Card
+                key={item[0].id}
+                className='customCard m-2'
+                onClick={e => {
+                  props.select(e, item, 'item')
+                }}
+              >
                 <Card.Img className='image' variant='top' src={item[0].image} />
                 <Card.Body>
                   <Card.Title>{item[0].description}</Card.Title>

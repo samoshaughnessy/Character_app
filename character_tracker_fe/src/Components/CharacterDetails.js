@@ -87,6 +87,12 @@ function CharacterDetails (props) {
           variant='secondary'
           onClick={() => {
             dispatch(addDescription(characterDetails))
+            setCharacterDetails({
+              name: '',
+              background: '',
+              backgroundEffect: '',
+              image: ''
+            })
             props.onHide()
             props.next()
           }}

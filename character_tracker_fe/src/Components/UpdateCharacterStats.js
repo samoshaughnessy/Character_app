@@ -1,22 +1,30 @@
-import { Modal, InputGroup, Button } from 'react-bootstrap'
+import { Modal, InputGroup, FormControl, Button } from 'react-bootstrap'
 import NumericInput from 'react-numeric-input2'
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { addStats } from '../Redux/character/actions'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  updateCharacterStatsThunk,
+  setCurrentCharacter
+} from '../Redux/character/actions'
 
 function CharacterStats (props) {
   const dispatch = useDispatch()
 
+  const currentCharacter = useSelector(
+    state => state.characterStore.currentCharacter
+  )
+
+  console.log(currentCharacter)
   const [characterStats, setCharacterStats] = useState({
-    experiance: 30,
-    strength: 1,
-    dexterity: 1,
-    concentration: 1,
-    intelligence: 1,
-    concentration: 1,
-    charisma: 1,
-    hp: 1,
-    stamina: 1
+    experiance: currentCharacter.experience_points,
+    strength: currentCharacter.strength,
+    dexterity: currentCharacter.dexterity,
+    concentration: currentCharacter.concentration,
+    intelligence: currentCharacter.intelligence,
+    concentration: currentCharacter.concentration,
+    charisma: currentCharacter.charisma,
+    hp: currentCharacter.hp,
+    stamina: currentCharacter.stamina
   })
 
   useEffect(() => {
@@ -30,7 +38,8 @@ function CharacterStats (props) {
   }, [
     characterStats.strength,
     characterStats.dexterity,
-    characterStats.concentration
+    characterStats.concentration,
+    currentCharacter
   ])
 
   return (
@@ -38,7 +47,7 @@ function CharacterStats (props) {
       <Modal.Header closeButton>Charatcer Stats</Modal.Header>
       <Modal.Body>
         <InputGroup.Text>Experiance Points Left:</InputGroup.Text>
-        <h2 className='centered'>{characterStats.experiance}</h2>
+        <h2 className='centered'>{characterStats.experiance || 0}</h2>
         <div className='flexCentered'>
           <div className='m-1'>
             <InputGroup.Text>Strength</InputGroup.Text>
@@ -133,20 +142,29 @@ function CharacterStats (props) {
         <Button
           variant='secondary'
           onClick={() => {
-            dispatch(addStats(characterStats))
-            setCharacterStats({
-              experiance: 30,
-              strength: 1,
-              dexterity: 1,
-              concentration: 1,
-              intelligence: 1,
-              concentration: 1,
-              charisma: 1,
-              hp: 1,
-              stamina: 1
-            })
+            dispatch(
+              updateCharacterStatsThunk(
+                currentCharacter.id,
+                characterStats,
+                currentCharacter
+              )
+            )
+
+            let character = {
+              ...currentCharacter,
+              experiance: characterStats.experience_points,
+              strength: characterStats.strength,
+              dexterity: characterStats.dexterity,
+              concentration: characterStats.concentration,
+              intelligence: characterStats.intelligence,
+              concentration: characterStats.concentration,
+              charisma: characterStats.charisma,
+              hp: characterStats.hp,
+              stamina: characterStats.stamina
+            }
+            dispatch(setCurrentCharacter(character))
+
             props.onHide()
-            props.next()
           }}
         >
           Continue

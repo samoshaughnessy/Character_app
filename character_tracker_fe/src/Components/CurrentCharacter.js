@@ -7,17 +7,45 @@ import {
   Card,
   Table
 } from 'react-bootstrap'
-import DisplayCard from './DisplayCard'
+import UpdateCharacterSkills from './UpdateCharacterSkills'
+import UpdateCharacterStats from './UpdateCharacterStats'
+import UpdateCurrentStats from './UpdateCurrentStats'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 import SelectItem from './SelectItem'
+import MultiCard from './MultiCard'
+import CharacterEquipment from './CharacterEquipment'
 
 function CurrentCharacter (props) {
+  const [showCharacterStats, setShowCharacterStats] = useState(false)
+  const [showCharacterSkills, setShowCharacterSkills] = useState(false)
   const [showAvalibleItems, setShowAvalibleItems] = useState(false)
+  const [showItemRemoveModel, setShowItemRemoveModal] = useState(false)
+  const [showCurrentStatsModal, setShowCurrentStats] = useState(false)
+  const [showCharacterEquipment, setShowCharacterEquipment] = useState(false)
+
+  const weapons = useSelector(state => state.characterStore.characterWeapons)
+
+  const showCurrentStat = () => setShowCurrentStats(true)
+  const stopShowCurrentStat = () => setShowCurrentStats(false)
+
+  const showStats = () => setShowCharacterStats(true)
+  const stopShowStats = () => setShowCharacterStats(false)
+
+  const showSkills = () => setShowCharacterSkills(true)
+  const stopShowSkills = () => setShowCharacterSkills(false)
+
+  const showUpdateItemModel = () => setShowItemRemoveModal(true)
+  const stopShowUpdateItemModel = () => setShowItemRemoveModal(false)
 
   const showItemModel = () => setShowAvalibleItems(true)
   const stopShowItemModel = () => setShowAvalibleItems(false)
+
+  const showEquipment = () => setShowCharacterEquipment(true)
+  const stopShowEquipment = () => {
+    setShowCharacterEquipment(false)
+  }
 
   const dispatch = useDispatch()
 
@@ -54,7 +82,7 @@ function CurrentCharacter (props) {
                   <Card.Title>
                     {currentCharacter.name} - {currentCharacter.background}
                   </Card.Title>
-                  <Button>Edit Current Stats</Button>
+                  <Button onClick={showCurrentStat}>Edit Current Stats</Button>
                   {/* Update HP, GOLD, SILVER, STAMINA, EXPERIANCE */}
 
                   <Card.Text className='text-center'>
@@ -75,11 +103,13 @@ function CurrentCharacter (props) {
                   </Card.Text>
                   <Card.Title>Current Experiance:</Card.Title>
                   <Card.Text className='text-center'>
-                    {currentCharacter.experiance_points
-                      ? currentCharacter.experiance_points
+                    {currentCharacter.experience_points > 0
+                      ? currentCharacter.experience_points
                       : 'Play to gain XP'}
                   </Card.Text>
-                  <Button>Edit Character Stats (level up)</Button>
+                  <Button onClick={setShowCharacterStats}>
+                    Edit Character Stats (level up)
+                  </Button>
                   {/* Update Strength, Dex, Concentration, Intelligence, Chrisma */}
 
                   <Table striped bordered hover>
@@ -113,7 +143,9 @@ function CurrentCharacter (props) {
                     </tbody>
                   </Table>
                   <br />
-                  <Button>Edit Character Ability (level up)</Button>
+                  <Button onClick={setShowCharacterSkills}>
+                    Edit Character Ability (level up)
+                  </Button>
                   {/* Update Character Skills */}
                   <Table striped bordered hover>
                     <thead>
@@ -139,19 +171,26 @@ function CurrentCharacter (props) {
               </Col>
               <Col>
                 {' '}
-                <Button>Update Character Weapons and Armour</Button>
+                <Button onClick={showEquipment}>
+                  Update Character Weapons and Armour
+                </Button>
                 {characterArmour &&
                 characterWeapons &&
                 currentItems &&
                 items ? (
                   <Card>
                     <h4>Armour</h4>
-                    <DisplayCard armour armourList={characterArmour} />
+                    <MultiCard armour armourList={characterArmour} />
                     <h4>Weapons</h4>
-                    <DisplayCard weapon weapons={characterWeapons} />
-                    <Button onClick={showItemModel}>Update items</Button>
+                    <MultiCard weapon weapons={characterWeapons} />
+                    <Button variant='success' onClick={showItemModel}>
+                      Update items
+                    </Button>
+                    <Button variant='danger' onClick={showUpdateItemModel}>
+                      Remove items
+                    </Button>
                     <h4>Items</h4>
-                    <DisplayCard item itemList={currentItems} />
+                    <MultiCard item itemList={currentItems} />
                   </Card>
                 ) : (
                   <>No data</>
@@ -165,6 +204,38 @@ function CurrentCharacter (props) {
         show={showAvalibleItems}
         onHide={stopShowItemModel}
         items={items}
+        character={currentCharacter}
+      />
+
+      <SelectItem
+        show={showItemRemoveModel}
+        onHide={stopShowUpdateItemModel}
+        items={currentItems}
+        character={currentCharacter}
+        remove
+      />
+
+      <UpdateCharacterStats show={showCharacterStats} onHide={stopShowStats} />
+
+      <UpdateCurrentStats
+        currentCharacter={currentCharacter}
+        show={showCurrentStatsModal}
+        onHide={stopShowCurrentStat}
+      />
+      <UpdateCharacterSkills
+        show={showCharacterSkills}
+        onHide={stopShowSkills}
+        currentSkills={currentSkills}
+        currentCharacter={currentCharacter}
+      />
+
+      <CharacterEquipment
+        show={showCharacterEquipment}
+        currentCharacter={currentCharacter}
+        onHide={stopShowEquipment}
+        next={() => {
+          stopShowEquipment()
+        }}
       />
     </>
   )

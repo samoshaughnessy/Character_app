@@ -12,9 +12,6 @@ class CharacterService {
   }
 
   async createCharacter (userID, characterDetails) {
-    console.log(characterDetails)
-    console.log(characterDetails.description.name)
-    console.log(userID)
     const character = {
       name: characterDetails.description.name,
       background: characterDetails.description.background,
@@ -36,12 +33,6 @@ class CharacterService {
       .insert(character)
       .into('character')
       .returning('id')
-
-    // insert into weapons
-
-    // insert into skills
-
-    console.log(characterID)
 
     let swords_skills = {
       skills_id: 1,
@@ -150,7 +141,6 @@ class CharacterService {
     const weapons = characterDetails.weapons.selectedWeapons
 
     weapons.forEach(async element => {
-      console.log(element)
       if (element.id == 6 || 7) {
         element.ammunition = 10
       } else {
@@ -164,8 +154,6 @@ class CharacterService {
         })
         .into('character_weapons')
     })
-    console.log(armour)
-    console.log(weapons)
 
     character.id = characterID[0].id
 
@@ -240,6 +228,140 @@ class CharacterService {
       .orderBy('skills_id')
 
     return skills
+  }
+
+  async updateSkills (character_id, skills) {
+    console.log(skills)
+    await this.knex('character')
+      .update({ experience_points: skills.experiance })
+      .where({ id: character_id })
+
+    await this.knex('character_skills')
+      .where({ character_id: character_id })
+      .del()
+
+    let swords_skills = {
+      skills_id: 1,
+      character_id: character_id,
+      skill_level: skills.swordPlay
+    }
+
+    let bow_skills = {
+      skills_id: 2,
+      character_id: character_id,
+      skill_level: skills.bowUse
+    }
+    let crossbow_skills = {
+      skills_id: 3,
+      character_id: character_id,
+      skill_level: skills.crossbowProficency
+    }
+    let spear_skills = {
+      skills_id: 4,
+      character_id: character_id,
+      skill_level: skills.spearPlay
+    }
+    let axe_skills = {
+      skills_id: 5,
+      character_id: character_id,
+      skill_level: skills.axePlay
+    }
+    let sheild_skills = {
+      skills_id: 6,
+      character_id: character_id,
+      skill_level: skills.sheildPlay
+    }
+    let persuade_skills = {
+      skills_id: 7,
+      character_id: character_id,
+      skill_level: skills.persuade
+    }
+    let intimidate_skills = {
+      skills_id: 8,
+      character_id: character_id,
+      skill_level: skills.intimidate
+    }
+    let awareness_skills = {
+      skills_id: 9,
+      character_id: character_id,
+      skill_level: skills.awareness
+    }
+    let search_skills = {
+      skills_id: 10,
+      character_id: character_id,
+      skill_level: skills.search
+    }
+    let healing_skills = {
+      skills_id: 11,
+      character_id: character_id,
+      skill_level: skills.healing
+    }
+    let craft_skills = {
+      skills_id: 12,
+      character_id: character_id,
+      skill_level: skills.craft
+    }
+    let tactics_skills = {
+      skills_id: 13,
+      character_id: character_id,
+      skill_level: skills.tactics
+    }
+    let hunt_skills = {
+      skills_id: 14,
+      character_id: character_id,
+      skill_level: skills.hunt
+    }
+    // insert skills into skills table
+
+    let skillsArray = [
+      swords_skills,
+      bow_skills,
+      crossbow_skills,
+      spear_skills,
+      axe_skills,
+      sheild_skills,
+      persuade_skills,
+      intimidate_skills,
+      awareness_skills,
+      search_skills,
+      healing_skills,
+      craft_skills,
+      tactics_skills,
+      hunt_skills
+    ]
+
+    skillsArray.forEach(async element => {
+      await this.knex.insert(element).into('character_skills')
+    })
+
+    return 'all done'
+  }
+
+  async updateStats (character_id, stats) {
+    console.log(stats)
+    await this.knex('character')
+      .update({
+        gold: stats.gold,
+        silver: stats.silver,
+        experience_points: stats.experience
+      })
+      .where({ id: character_id })
+  }
+
+  async updateStatistics (character_id, stats) {
+    console.log(stats, character_id)
+    await this.knex('character')
+      .update({
+        experience_points: stats.experiance,
+        strength: stats.strength,
+        dexterity: stats.dexterity,
+        intelligence: stats.intelligence,
+        concentration: stats.concentration,
+        charisma: stats.charisma,
+        hp: stats.hp,
+        stamina: stats.stamina
+      })
+      .where({ id: character_id })
   }
 }
 

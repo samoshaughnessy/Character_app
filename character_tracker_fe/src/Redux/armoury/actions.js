@@ -64,3 +64,53 @@ export const getCurrentWeaponsArmourThunk = characterId => {
       })
   }
 }
+
+export const setCurrentItems = (characterId, items) => {
+  return dispatch => {
+    axios
+      .post(
+        `${process.env.REACT_APP_API_SERVER}/api/weaponsarmour/armoury/items/${characterId}`,
+        { items },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      )
+      .then(response => {
+        console.log('Set Items Thunk:', response.data)
+        dispatch(getCurrentWeaponsArmourThunk(characterId))
+      })
+  }
+}
+
+export const removeCurrentItems = (characterId, items) => {
+  return dispatch => {
+    axios
+      .put(
+        `${process.env.REACT_APP_API_SERVER}/api/weaponsarmour/armoury/items/${characterId}`,
+        { items },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      )
+      .then(response => {
+        console.log(('Set Items Thunk:', response.data))
+        dispatch(getCurrentWeaponsArmourThunk(characterId))
+      })
+  }
+}
+
+export const updateWeaponsThunk = (characterId, weapons, character) => {
+  return dispatch => {
+    console.log(weapons, 'weapon')
+    axios
+      .put(
+        `${process.env.REACT_APP_API_SERVER}/api/weaponsarmour/armoury/new/${characterId}`,
+        { weapons },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then(response => {
+        console.log(('update State', response))
+        dispatch(getCurrentWeaponsArmourThunk(characterId))
+      })
+  }
+}
